@@ -1,0 +1,2 @@
+# kill ssh-agent at logout
+eval `ssh-agent -k`

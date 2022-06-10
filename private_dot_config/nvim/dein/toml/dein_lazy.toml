@@ -1,0 +1,251 @@
+[[plugins]] # markdown の プレビュー
+repo = 'kannokanno/previm'
+hook_add = '''
+  au BufRead,BufNewFile *.md set filetype=markdown
+  let g:previm_open_cmd = 'open -a Google\ Chrome'
+'''
+
+[[plugins]] # DashでDocument検索
+repo = 'rizzatti/dash.vim'
+hook_add = '''
+  nmap <silent> <Leader>d <Plug>DashSearch
+'''
+
+[[plugins]] # URL開く
+repo = 'tyru/open-browser.vim'
+
+[[plugins]] # API叩く
+repo = 'mattn/webapi-vim'
+
+[[plugins]] # はてなブログ投稿
+repo = 'moznion/hateblo.vim'
+
+[[plugins]] # esa.io 投稿
+repo = 'upamune/esa.vim'
+hook_add = '''
+  let g:esa_team = 'tokoyax'
+'''
+
+[[plugins]] # Git のコミットを見る
+# https://rhysd.hatenablog.com/entry/2019/03/10/230119
+repo = 'rhysd/git-messenger.vim'
+lazy = 1
+on_cmd = 'GitMessenger'
+on_map = '<Plug>(git-messenger)'
+hook_add = '''
+  nmap <Leader>gm <Plug>(git-messenger)
+  let g:git_messenger_close_on_cursor_moved = 1
+  let g:git_messenger_no_default_mappings = 1
+  let g:git_messenger_into_popup_after_show = 1
+  let g:git_messenger_always_into_popup = 1
+'''
+
+[[plugins]] # QuickFix絞り込み
+repo = 'fuenor/qfixgrep'
+
+[[plugins]] # QuickFixを置換対象にする
+repo = 'thinca/vim-qfreplace'
+
+[[plugins]] # 単語単位のdiff
+repo = 'rickhowe/diffchar.vim'
+
+[[plugins]] # プログラムをVimから実行して結果見る
+repo = 'thinca/vim-quickrun'
+hook_add = '''
+  nnoremap <Leader>run :<C-u>QuickRun<CR>
+  let g:quickrun_config = {
+  \    '_': {
+  \        'outputter':                           'error',
+  \        'outputter/error/success':             'buffer',
+  \        'outputter/error/error':               'quickfix',
+  \        'outputter/buffer/close_on_empty':     1,
+  \        'outputter/buffer/split':              ':rightbelow 8sp',
+  \        'runner':                              'vimproc',
+  \        'runner/vimproc/updatetime':           60},
+  \   }
+'''
+
+[[plugins]] # vim-quickrun の 汎用的な quickrun-hook 集
+repo = 'osyo-manga/shabadou.vim'
+
+# [[plugins]] # ステップ実行
+# repo = 'joonty/vdebug'
+# hook_add = '''
+#   let g:vimrc_vdebug = getcwd() . "/.vimrc.vdebug"
+#   if filereadable(g:vimrc_vdebug)
+#     " source の引数に変数が指定できないため exec で読み込む
+#     exec ":source " . g:vimrc_vdebug
+#   endif
+#   " -------------------------------------------------------------------------
+#   " パスマップ設定の仕方
+#   " ステップ実行用の .vimrc.vdebug をプロジェクトのルートに配置する
+#   "
+#   "let g:vdebug_options = {
+#   "  \ 'path_maps': {"/path/to/remote/project": "/path/to/local/project"},
+#   "  \
+#   "}
+#   " -------------------------------------------------------------------------
+# '''
+
+# -------------------------------------------------------
+# for languages
+# -------------------------------------------------------
+
+# Markdown
+[[plugins]]
+repo = 'rcmdnk/vim-markdown'
+on_ft = 'markdown'
+
+# HTML
+[[plugins]]
+repo = 'mattn/emmet-vim'
+on_ft = ['html', 'eruby', 'jsx']
+hook_add = '''
+  " <C-e>,(カンマ) で発動
+  let g:user_emmet_leader_key = '<C-e>'
+  let g:use_emmet_complete_tag = 1
+  let g:user_emmet_settings = {
+        \ 'lang' : 'ja',
+        \ 'html' : {
+        \   'indentation' : '  '
+        \   },
+        \ 'javascript.jsx' : {
+        \   'extends' : 'jsx',
+        \ },
+        \}
+'''
+
+# JavaScript
+[[plugins]]
+repo = 'pangloss/vim-javascript'
+on_ft = 'javascript'
+
+# TypeScript
+repo = 'leafgarland/typescript-vim'
+on_ft = 'typescript'
+
+# VueJS
+[[plugins]]
+repo = 'posva/vim-vue'
+on_ft = ['vue']
+
+# pug
+[[plugins]]
+repo = 'digitaltoad/vim-pug'
+on_ft = ['vue']
+
+# JSX
+[[plugins]]
+repo = 'mxw/vim-jsx'
+on_ft = 'jsx'
+
+# CoffeeScript
+[[plugins]]
+repo = 'kchmck/vim-coffee-script'
+on_ft = 'coffee'
+
+ # Elixir
+[[plugins]]
+repo = 'elixir-lang/vim-elixir'
+on_ft = 'elixir'
+
+# Ruby
+[[plugins]]
+repo = 'tpope/vim-rails'
+on_ft = 'ruby'
+
+[[plugins]]
+repo = 'tpope/vim-dispatch'
+on_ft = 'ruby'
+
+[[plugins]]
+repo = 'janko-m/vim-test'
+on_ft = 'ruby'
+hook_add = '''
+  let test#strategy = "neovim"
+  let test#ruby#rspec#executable = 'rspec'
+
+  " https://qiita.com/joker1007/items/4dbff328f39c11e732af
+  function! DockerTransformer(cmd) abort
+    if $APP_CONTAINER_NAME != ''
+      let container_id = system('docker ps --filter name=$APP_CONTAINER_NAME -q')
+      return 'docker exec -t ' . container_id . ' spring ' . a:cmd
+    else
+      return 'bundle exec ' . a:cmd
+    endif
+  endfunction
+
+  let g:test#custom_transformations = {'docker': function('DockerTransformer')}
+  let g:test#transformation = 'docker'
+
+  " these "Ctrl mappings" work well when Caps Lock is mapped to Ctrl
+  noremap <silent> t<C-n> :TestNearest<CR>
+  noremap <silent> t<C-f> :TestFile<CR>
+  noremap <silent> t<C-s> :TestSuite<CR>
+  noremap <silent> t<C-l> :TestLast<CR>
+  noremap <silent> t<C-g> :TestVisit<CR>
+'''
+
+[[plugins]]
+repo = 'vim-ruby/vim-ruby'
+on_ft = 'ruby'
+
+[[plugins]]
+repo = 'noprompt/vim-yardoc'
+on_ft = 'ruby'
+
+# Slim
+[[plugins]]
+repo = 'slim-template/vim-slim'
+on_ft = 'slim'
+
+# Haskell
+[[plugins]]
+repo = 'nbouscal/vim-stylish-haskell'
+on_ft = 'haskell'
+
+[[plugins]]
+repo = 'neovimhaskell/haskell-vim'
+on_ft = 'haskell'
+
+# Elm syntax highlight
+[[plugins]]
+repo = 'andys8/vim-elm-syntax'
+on_ft = 'elm'
+
+# PureScript
+[[plugins]]
+repo = 'purescript-contrib/purescript-vim'
+on_ft = 'purescript'
+
+# fish
+[[plugins]]
+repo = 'dag/vim-fish'
+on_ft = 'fish'
+
+# CSV
+[[plugins]]
+# https://github.com/mechatroner/rainbow_csv
+repo = 'mechatroner/rainbow_csv'
+on_ft = 'csv'
+
+# JSON
+[[plugins]]
+repo = 'elzr/vim-json'
+on_ft = 'json'
+
+# Dart
+[[plugins]]
+repo = 'dart-lang/dart-vim-plugin'
+on_ft = 'dart'
+
+# Flutter
+[[plugins]]
+repo = 'thosakwe/vim-flutter'
+on_ft = 'dart'
+hook_add = '''
+  nnoremap <leader>fa :FlutterRun<cr>
+  nnoremap <leader>fq :FlutterQuit<cr>
+  nnoremap <leader>fr :FlutterHotReload<cr>
+  nnoremap <leader>fR :FlutterHotRestart<cr>
+'''
