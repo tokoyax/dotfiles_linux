@@ -50,6 +50,10 @@ repo = 'rking/ag.vim'
 [[plugins]]
 repo = 'tpope/vim-abolish'
 
+# =====================
+# denite
+# =====================
+# {{{
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 hook_add = '''
@@ -169,6 +173,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'chemzqm/denite-extra'
+# }}}
 
 # =====================
 # LSP
