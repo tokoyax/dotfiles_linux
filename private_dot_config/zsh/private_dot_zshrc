@@ -1,71 +1,3 @@
-# start processes
-sh $XDG_CONFIG_HOME/start.sh
-
-# env {{{
-export LANG=ja_JP.UTF-8
-export EDITOR=/usr/bin/nvim
-# }}}
-
-# path {{{
-export PATH=$HOME/.cargo/bin:$PATH
-export PATH=$HOME/go/bin:$PATH
-export PATH=$HOME/.local/bin:$PATH
-export DENO_INSTALL="/home/tokoyax/.deno" # deno
-export PATH=$DENO_INSTALL/bin:$PATH
-export PATH=$HOME/.rbenv/bin::$PATH
-typeset -U PATH
-# }}}
-
-# options {{{
-setopt no_flow_control # フローコントロール無効
-setopt ignore_eof # Ctrl+Dで終了しない
-# }}}
-
-# alias {{{
-alias dox='docker exec -it $(docker ps --format "{{.Names}}" | fzf) bash'
-# }}}
-
-# このへん大体ここ参考
-# https://blog.nishimu.land/entry/2022/03/21/003009
-
-# cdr {{{
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-add-zsh-hook chpwd chpwd_recent_dirs
-zstyle ':completion:*:*:cdr:*:*' menu selection
-zstyle ':chpwd:*' recent-dirs-max 100
-zstyle ':chpwd:*' recent-dirs-default true
-zstyle ':chpwd:*' recent-dirs-insert true
-zstyle ':chpwd:*' recent-dirs-file "$XDG_DATA_HOME"/zsh/chpwd-recent-dirs
-
-# AUTO_CDの対象に ~ と上位ディレクトリを加える
-cdpath=(~ ..)
-# }}}
-
-# rbenv {{{
-eval "$(rbenv init - zsh)"
-# see https://github.com/rbenv/ruby-build/discussions/1940#discussioncomment-2663209
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/openssl-1.1.1n/"
-# }}}
-
-# direnv {{{
-eval "$(direnv hook zsh)"
-# }}}
-
-# fzf {{{
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
-source $XDG_CONFIG_HOME/fzf/functions.zsh
-export FZF_DEFAULT_OPTS='--layout=reverse --border --exit-0'
-# }}}
-
-# exa {{{
-alias ls='exa --classify --icons -h --reverse'
-# }}}
-
-# nix {{{
-source ~/.nix-profile/etc/profile.d/nix.sh
-# }}}
-
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
@@ -198,3 +130,84 @@ for key ('k') bindkey -M vicmd ${key} history-substring-search-up
 for key ('j') bindkey -M vicmd ${key} history-substring-search-down
 unset key
 # }}} End configuration added by Zim install
+
+# =============================================================
+# user settings
+# =============================================================
+
+# start processes
+sh $XDG_CONFIG_HOME/start.sh
+
+# env {{{
+export LANG=ja_JP.UTF-8
+export EDITOR=/usr/local/bin/nvim
+# }}}
+
+# path {{{
+export PATH=$HOME/.cargo/bin:$PATH
+export PATH=$HOME/go/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
+export DENO_INSTALL="/home/tokoyax/.deno" # deno
+export PATH=$DENO_INSTALL/bin:$PATH
+export PATH=$HOME/.rbenv/bin::$PATH
+typeset -U PATH
+# }}}
+
+# options {{{
+setopt no_flow_control # フローコントロール無効
+setopt ignore_eof # Ctrl+Dで終了しない
+# }}}
+
+# alias {{{
+alias dox='docker exec -it $(docker ps --format "{{.Names}}" | fzf) bash'
+alias vi=/usr/local/bin/nvim
+# }}}
+
+# このへん大体ここ参考
+# https://blog.nishimu.land/entry/2022/03/21/003009
+
+# cdr {{{
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+add-zsh-hook chpwd chpwd_recent_dirs
+zstyle ':completion:*:*:cdr:*:*' menu selection
+zstyle ':chpwd:*' recent-dirs-max 100
+zstyle ':chpwd:*' recent-dirs-default true
+zstyle ':chpwd:*' recent-dirs-insert true
+zstyle ':chpwd:*' recent-dirs-file "$XDG_DATA_HOME"/zsh/chpwd-recent-dirs
+
+# AUTO_CDの対象に ~ と上位ディレクトリを加える
+cdpath=(~ ..)
+# }}}
+
+# rbenv {{{
+eval "$(rbenv init - zsh)"
+# see https://github.com/rbenv/ruby-build/discussions/1940#discussioncomment-2663209
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/openssl-1.1.1n/"
+# }}}
+
+# direnv {{{
+eval "$(direnv hook zsh)"
+# }}}
+
+# fzf {{{
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/doc/fzf/examples/completion.zsh
+source $XDG_CONFIG_HOME/fzf/functions.zsh
+export FZF_DEFAULT_OPTS='--layout=reverse --border --exit-0'
+# }}}
+
+# exa {{{
+alias ls='exa --classify --icons -h --reverse'
+# }}}
+
+# nix {{{
+source ~/.nix-profile/etc/profile.d/nix.sh
+# }}}
+
+# asdf {{{
+. $HOME/.asdf/asdf.sh
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+# initialise completions with ZSH's compinit
+autoload -Uz compinit && compinit
+# }}}
